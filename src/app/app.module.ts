@@ -22,6 +22,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { ExplorerComponent } from './components/explorer/explorer.component';
 import { MainContentComponent } from './components/main-content/main-content.component';
+import { CodeContentComponent } from './components/code-content/code-content.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,7 +37,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     HeaderComponent,
     NavigationComponent,
     ExplorerComponent,
-    MainContentComponent
+    MainContentComponent,
+    CodeContentComponent
   ],
   imports: [
     BrowserModule,

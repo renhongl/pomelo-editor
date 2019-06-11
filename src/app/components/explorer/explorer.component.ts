@@ -7,10 +7,12 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class ExplorerComponent implements OnInit {
 
-  @ViewChild('explorer') explorer: ElementRef;
+  @ViewChild('explorer', {static: false}) explorer: ElementRef;
 
   dragState: boolean;
   mousePX: number;
+
+  
 
   constructor() { }
 
@@ -22,6 +24,8 @@ export class ExplorerComponent implements OnInit {
     document.addEventListener('mouseup', (e) => {
       this.dragState = false;
     });
+
+
   }
 
   dragStart(e) {
@@ -36,6 +40,9 @@ export class ExplorerComponent implements OnInit {
       const explorerDom = this.explorer.nativeElement;
       const width = explorerDom.clientWidth;
       explorerDom.style.width = width + offsetX + 'px';
+      const codeContent = document.querySelector('.code-content');
+      const codeContentWidth = codeContent.clientWidth;
+      codeContent.style.width = codeContentWidth - offsetX + 'px';
       this.mousePX = e.layerX;
       console.log(offsetX, width);
     }
