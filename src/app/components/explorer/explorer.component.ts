@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-explorer',
@@ -11,10 +11,13 @@ export class ExplorerComponent implements OnInit {
 
   dragState: boolean;
   mousePX: number;
+  fileList: Array<string>;
 
-  
-
-  constructor() { }
+  constructor(@Inject('explorerService') private explorerService) {
+    this.fileList = explorerService.getFileList().subscribe(result => {
+      this.fileList = result;
+    });
+  }
 
   ngOnInit() {
     document.addEventListener('mousemove', (e) => {
@@ -23,9 +26,8 @@ export class ExplorerComponent implements OnInit {
 
     document.addEventListener('mouseup', (e) => {
       this.dragState = false;
+      document.body.style.cursor = 'default';
     });
-
-
   }
 
   dragStart(e) {
@@ -34,18 +36,24 @@ export class ExplorerComponent implements OnInit {
     document.body.style.cursor = 'w-resize';
   }
 
+  getMini(n1, n2) {
+    if (n1 > n2) {
+      return n2;
+    }
+    return n1;
+  }
+
   dragging(e) {
     if (this.dragState) {
-      const offsetX = e.layerX - this.mousePX;
-      const explorerDom = this.explorer.nativeElement;
-      const width = explorerDom.clientWidth;
-      explorerDom.style.width = width + offsetX + 'px';
-      const codeContent = document.querySelector('.code-content');
-      const codeContentWidth = codeContent.clientWidth;
-      codeContent.style.width = codeContentWidth - offsetX + 'px';
-      this.mousePX = e.layerX;
-      console.log(offsetX, width);
+       const codeContent: HTMLElement = document.querySelector('.code-content');
+        const mainContent: HTMLElement = document.querySelector('.main-content');
+        const offsetX = e.layerX - this.mousePX;
+        const explorerDom = this.explorer.nativeElement;
+        const width = explorerDom.clientWidth;
+        const updatedWidth = this.getMini(width + offsetX, mainContent.clientWidth * 0.9);
+        explorerDom.style.width = updatedWidth + 'px';
+        codeContent.style.width = mainContent.clientWidth - explorerDom.clientWidth + 'px';
+        this.mousePX = e.layerX;
     }
   }
- 
 }

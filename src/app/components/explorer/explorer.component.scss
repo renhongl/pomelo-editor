@@ -1,14 +1,13 @@
 .explorer{
     width: 30%;
     height: 100%;
-    background: grey;
     float: left;
 
     .border-line{
-        width: 2px;
+        width: 4px;
         height: 100%;
-        background: blue;
         float: right;
+        background: #383838;
         cursor: w-resize;
     }
 }

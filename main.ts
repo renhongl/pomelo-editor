@@ -1,6 +1,8 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+
+const fs = require('fs');
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -17,10 +19,13 @@ function createWindow() {
     y: 0,
     width: size.width,
     height: size.height,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
     },
   });
+
+  win.removeMenu();
 
   if (serve) {
     require('electron-reload')(__dirname, {
@@ -45,6 +50,14 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     win = null;
+  });
+
+  ipcMain.on('File', (event, args) => {
+    dialog.showOpenDialog({ properties: [ 'openFile', 'openDirectory', 'multiSelections' ]}, (result) => {
+      fs.readdir(result[0], (err, files) => {
+        event.sender.send('File-return', files);
+      });
+    });
   });
 
 }

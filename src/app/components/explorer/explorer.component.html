@@ -1,3 +1,4 @@
 <div class="explorer" #explorer>
+  <div class="file" *ngFor="let file of fileList">{{file}}</div>
   <div class="border-line" (mousedown)="dragStart($event)"></div>
 </div>

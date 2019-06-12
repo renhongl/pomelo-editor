@@ -16,6 +16,8 @@ import { ElectronService } from './providers/electron.service';
 
 import { WebviewDirective } from './directives/webview.directive';
 
+import { CodemirrorModule } from 'ng2-codemirror';
+
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -23,6 +25,8 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { ExplorerComponent } from './components/explorer/explorer.component';
 import { MainContentComponent } from './components/main-content/main-content.component';
 import { CodeContentComponent } from './components/code-content/code-content.component';
+
+import { ExplorerService } from './providers/explorer.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -45,6 +49,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
+    CodemirrorModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -53,7 +58,10 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [ElectronService],
+  providers: [ElectronService, {
+    provide: 'explorerService',
+    useClass: ExplorerService
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
